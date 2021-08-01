@@ -3,6 +3,7 @@ export default [
     parent: 'lists_create_with',
     child: 'horizontal_menu_item',
     prompt: 'horizontal items',
+    repeatChildren: 'horizontal_menu_subitems',
     create: [
       {
         type: 'text',
