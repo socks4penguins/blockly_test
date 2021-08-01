@@ -1,8 +1,21 @@
 export default [
   {
     parent: 'lists_create_with',
-    child: 'horizontal_menu_items',
+    child: 'horizontal_menu_item',
     prompt: 'horizontal items',
+    create: [
+      {
+        type: 'text',
+        fields: [{ field: 'TEXT' }],
+        prompt: 'text value',
+        repeat: true,
+      },
+    ],
+  },
+  {
+    parent: 'lists_create_with',
+    child: 'horizontal_menu_subitems',
+    prompt: 'horizontal subitems',
     create: [
       {
         type: 'text',

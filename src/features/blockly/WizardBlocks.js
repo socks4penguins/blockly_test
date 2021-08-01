@@ -23,6 +23,10 @@ export default function WizardBlocks(props) {
     return childBlock;
   }
 
+  function firstChildType(block) {
+    return block.childBlocks_.length > 0 && block.childBlocks_[0].type;
+  }
+
   function connectBlockToInput({ parentBlock, inputName, childBlock }) {
     var parentConnection = parentBlock.getInput(inputName).connection;
     var childConnection = childBlock.outputConnection;
@@ -63,14 +67,24 @@ export default function WizardBlocks(props) {
     return [];
   }
 
+  console.log('first', selectedBlock && firstChildType(selectedBlock));
   const wizardBlock =
-    selectedBlock && wizard_blocks.filter(type => selectedBlock.type === type.parent)
-      ? wizard_blocks.filter(type => selectedBlock.type === type.parent)[0]
+    selectedBlock &&
+    wizard_blocks.filter(
+      wiz =>
+        selectedBlock.type === wiz.parent &&
+        (!wiz.child || firstChildType(selectedBlock) === wiz.child),
+    ).length > 0
+      ? wizard_blocks.filter(
+          wiz =>
+            selectedBlock.type === wiz.parent &&
+            (!wiz.child || firstChildType(selectedBlock) === wiz.child),
+        )[0]
       : null;
-  // console.log({ selectedBlock, empty: selectedBlock && getEmptyInputs(selectedBlock) });
+  console.log({ selectedBlock, wizardBlock });
   return (
     <div className="blockly-wizard-blocks vertical layout">
-      <Typography variant="body1">Wizard{selectedBlock && ' - ' + selectedBlock.type}</Typography>
+      <Typography variant="body1">Wizard{wizardBlock && ' - ' + wizardBlock.prompt}</Typography>
       {wizardBlock && Blockly.selected && (
         <div className="horizontal layout justified">
           <TextField
