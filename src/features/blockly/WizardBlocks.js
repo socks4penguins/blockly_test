@@ -18,7 +18,9 @@ export default function WizardBlocks(props) {
     });
     childBlock.initSvg();
     childBlock.render();
+    return childBlock;
   }
+
   function addBlockToParent({ parentBlock, inputName, childBlock }) {
     var parentConnection = parentBlock.getInput(inputName).connection;
     var childConnection = childBlock.previousConnection;
@@ -44,6 +46,18 @@ export default function WizardBlocks(props) {
           <TextField
             onBlur={e => {
               console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
+              wizardBlock.targets.forEach(target => {
+                const fields = target.fields.map(field => {
+                  return { field, value: state.main };
+                });
+                const newBlock = makeBlock({ type: target.type, fields });
+                console.log({fields, newBlock})
+                addBlockToParent({
+                  parent: selectedBlock,
+                  input: getEmptyInputs(selectedBlock)[0],
+                  childBlock: newBlock,
+                });
+              });
             }}
             onChange={e => setState({ ...state, main: e.target.value })}
             value={state.main}

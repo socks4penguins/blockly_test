@@ -3,7 +3,7 @@ export default {
     targets: [
       {
         type: 'text',
-        field: 'TEXT',
+        fields:[{field: 'TEXT'}],
         prompt: 'text value',
         repeat: true,
       },
