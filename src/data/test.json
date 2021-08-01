@@ -1,0 +1,7 @@
+{
+  "text_name": "main",
+  "checkbox_primary": true,
+  "dropdown_position": "LEFT",
+  "text_title": "To Do's",
+  "statements_children": " {"value_component":"({"value_name":"({"checkbox_name":true,"value_children":""})","statements_on_click":" {"text_field":"activeMenu","text_value":"add todo"}"})"}"
+}
