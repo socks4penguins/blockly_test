@@ -32,15 +32,6 @@ export default function WizardBlocks(props) {
     parentBlock.initSvg();
     parentBlock.render();
 
-    // make the mutator
-    // var mutator = Blockly.Block.obtain(Blockly.getMainWorkspace(), 'text_join');
-    // mutator.initSvg();
-    // mutator.render();
-
-    // // add a new item
-    // var new_input = mutator.appendInput_(1, 'ADD' + mutator.inputList.length);
-    // mutator.itemCount_ = mutator.inputList.length;
-
     // var childBlock1 = workspace.newBlock('text');
     // childBlock1.setFieldValue('Hello', 'TEXT');
     // childBlock1.initSvg();
@@ -55,10 +46,21 @@ export default function WizardBlocks(props) {
     // parentConnection1.connect(childConnection1);
   }
 
-  function getEmptyInputs(block) {
-    return block.inputList.filter(
+  function getEmptyInputs(block, shouldMake) {
+    const empty = block.inputList.filter(
       input => input.connection && input.connection.targetConnection === null,
     );
+
+    if (empty.length > 0) return empty;
+
+    if (shouldMake) {
+      // // add a new item
+      var new_input = block.appendInput_(1, 'ADD' + block.inputList.length);
+      block.itemCount_ = block.inputList.length;
+      return [new_input];
+    }
+
+    return [];
   }
 
   const wizardBlock =
@@ -81,7 +83,7 @@ export default function WizardBlocks(props) {
                 connectBlockToInput({
                   parentBlock: selectedBlock,
                   // inputName: 'ADD0',
-                  inputName: getEmptyInputs(selectedBlock)[0].name,
+                  inputName: getEmptyInputs(selectedBlock, true)[0].name,
                   childBlock: makeBlock({ type: target.type, fields }),
                 });
               });

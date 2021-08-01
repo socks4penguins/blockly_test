@@ -1,5 +1,6 @@
 export default {
   lists_create_with: {
+    // works
     targets: [
       {
         type: 'text',
@@ -20,6 +21,7 @@ export default {
     ],
   },
   text_join: {
+    // works
     targets: [
       {
         type: 'text',
