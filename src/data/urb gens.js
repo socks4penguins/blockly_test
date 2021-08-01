@@ -1,5 +1,42 @@
 import Blockly from 'blockly';
 
+Blockly.JavaScript['horizontal_menu_subitems'] = function(block) {
+  var text_lefticon = block.getFieldValue('leftIcon');
+  var text_text = block.getFieldValue('text');
+  var text_righticon = block.getFieldValue('rightIcon');
+  var dropdown_position = block.getFieldValue('position');
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['horizontal_menu_item'] = function(block) {
+  var text_lefticon = block.getFieldValue('leftIcon');
+  var text_text = block.getFieldValue('text');
+  var text_righticon = block.getFieldValue('rightIcon');
+  var dropdown_position = block.getFieldValue('position');
+  var value_items = Blockly.JavaScript.valueToCode(block, 'items', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['menu_item'] = function(block) {
+  var text_lefticon = block.getFieldValue('leftIcon');
+  var dropdown_typr = block.getFieldValue('typr');
+  var text_text = block.getFieldValue('text');
+  var text_righticon = block.getFieldValue('rightIcon');
+  var dropdown_position = block.getFieldValue('position');
+  var checkbox_closeonclick = block.getFieldValue('closeOnClick') == 'TRUE';
+  var text_gotomenu = block.getFieldValue('goToMenu');
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['menus_function'] = function(block) {
   var text_function_name = block.getFieldValue('function_name');
   var statements_fields = Blockly.JavaScript.statementToCode(block, 'fields');

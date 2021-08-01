@@ -1,5 +1,98 @@
 import Blockly from 'blockly';
 
+Blockly.Blocks['horizontal_menu_subitems'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('icon')
+      .appendField(new Blockly.FieldTextInput(''), 'leftIcon')
+      .appendField('text')
+      .appendField(new Blockly.FieldTextInput(''), 'text')
+      .appendField(new Blockly.FieldTextInput(''), 'rightIcon')
+      .appendField('icon');
+    this.appendDummyInput()
+      .appendField('text position')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['left', 'left'],
+          ['center', 'center'],
+          ['right', 'right'],
+        ]),
+        'position',
+      );
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
+Blockly.Blocks['horizontal_menu_item'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('icon')
+      .appendField(new Blockly.FieldTextInput(''), 'leftIcon')
+      .appendField('text')
+      .appendField(new Blockly.FieldTextInput(''), 'text')
+      .appendField(new Blockly.FieldTextInput(''), 'rightIcon')
+      .appendField('icon');
+    this.appendDummyInput()
+      .appendField('text position')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['left', 'left'],
+          ['center', 'center'],
+          ['right', 'right'],
+        ]),
+        'position',
+      );
+    this.appendValueInput('items')
+      .setCheck(null)
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField('items');
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
+Blockly.Blocks['menu_item'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('icon')
+      .appendField(new Blockly.FieldTextInput(''), 'leftIcon')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['label', 'label'],
+          ['title', 'title'],
+        ]),
+        'typr',
+      )
+      .appendField(new Blockly.FieldTextInput(''), 'text')
+      .appendField(new Blockly.FieldTextInput(''), 'rightIcon')
+      .appendField('icon');
+    this.appendDummyInput()
+      .appendField('text position')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['left', 'left'],
+          ['center', 'center'],
+          ['right', 'right'],
+        ]),
+        'position',
+      )
+      .appendField('close on click')
+      .appendField(new Blockly.FieldCheckbox('FALSE'), 'closeOnClick');
+    this.appendDummyInput()
+      .appendField('go to menu')
+      .appendField(new Blockly.FieldTextInput(''), 'goToMenu');
+    this.setOutput(true, 'menu item');
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
 Blockly.Blocks['go_to_menu'] = {
   init: function() {
     this.appendDummyInput()
