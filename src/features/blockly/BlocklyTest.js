@@ -28,6 +28,9 @@ export default function BlocklyTest() {
   function handleWorkspaceChange(event) {
     console.log('selected', Blockly.selected);
     // Blockly.selected && Blockly.selected.select();
+    // const sel = Blockly.selected
+    // Blockly.selected && Blockly.selected.unselect();
+    // sel && sel.select()
     setSelectedBlock(Blockly.selected);
     setCode(Blockly.JavaScript.workspaceToCode(workspace));
     var xml = Blockly.Xml.workspaceToDom(workspace);
