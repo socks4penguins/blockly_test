@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
 import wizard_blocks from '../../data/wizard_blocks';
+import * as Blockly from 'blockly';
 // import PropTypes from 'prop-types';
 
 export default function WizardBlocks(props) {
@@ -9,11 +10,12 @@ export default function WizardBlocks(props) {
 
   function makeBlock({ type, fields }) {
     var childBlock = workspace.newBlock(type);
+    // debugger;
     fields.forEach(field => {
       try {
-        childBlock.setFieldValue(field.value, field.name);
+        childBlock.setFieldValue(field.value, field.field);
       } catch {
-        console.Console("couldn't set field", field);
+        console.log("couldn't set field", field);
       }
     });
     childBlock.initSvg();
@@ -21,10 +23,36 @@ export default function WizardBlocks(props) {
     return childBlock;
   }
 
-  function addBlockToParent({ parentBlock, inputName, childBlock }) {
+  function connectBlockToInput({ parentBlock, inputName, childBlock }) {
     var parentConnection = parentBlock.getInput(inputName).connection;
-    var childConnection = childBlock.previousConnection;
-    parentConnection.connect(childConnection);
+    var childConnection = childBlock.outputConnection;
+    // debugger;
+    const result = childConnection.connect(parentConnection);
+    console.log({ result });
+    parentBlock.initSvg();
+    parentBlock.render();
+
+    // make the mutator
+    // var mutator = Blockly.Block.obtain(Blockly.getMainWorkspace(), 'text_join');
+    // mutator.initSvg();
+    // mutator.render();
+
+    // // add a new item
+    // var new_input = mutator.appendInput_(1, 'ADD' + mutator.inputList.length);
+    // mutator.itemCount_ = mutator.inputList.length;
+
+    // var childBlock1 = workspace.newBlock('text');
+    // childBlock1.setFieldValue('Hello', 'TEXT');
+    // childBlock1.initSvg();
+    // childBlock1.render();
+
+    // var parentBlock1 = workspace.newBlock('text_print');
+    // parentBlock1.initSvg();
+    // parentBlock1.render();
+
+    // var parentConnection1 = parentBlock1.getInput('TEXT').connection;
+    // var childConnection1 = childBlock1.outputConnection;
+    // parentConnection1.connect(childConnection1);
   }
 
   function getEmptyInputs(block) {
@@ -48,14 +76,13 @@ export default function WizardBlocks(props) {
               console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
               wizardBlock.targets.forEach(target => {
                 const fields = target.fields.map(field => {
-                  return { field, value: state.main };
+                  return { field: field.field, value: state.main };
                 });
-                const newBlock = makeBlock({ type: target.type, fields });
-                console.log({fields, newBlock})
-                addBlockToParent({
-                  parent: selectedBlock,
-                  input: getEmptyInputs(selectedBlock)[0],
-                  childBlock: newBlock,
+                connectBlockToInput({
+                  parentBlock: selectedBlock,
+                  // inputName: 'ADD0',
+                  inputName: getEmptyInputs(selectedBlock)[0].name,
+                  childBlock: makeBlock({ type: target.type, fields }),
                 });
               });
             }}
