@@ -81,7 +81,7 @@ export default function WizardBlocks(props) {
             (!wiz.child || firstChildType(selectedBlock) === wiz.child),
         )[0]
       : null;
-  console.log({ selectedBlock, wizardBlock });
+  // console.log({ selectedBlock, wizardBlock });
   return (
     <div className="blockly-wizard-blocks vertical layout">
       <Typography variant="body1">Wizard{wizardBlock && ' - ' + wizardBlock.prompt}</Typography>
@@ -89,7 +89,7 @@ export default function WizardBlocks(props) {
         <div className="horizontal layout justified">
           <TextField
             onBlur={e => {
-              console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
+              // console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
               wizardBlock.create.forEach(newBlock => {
                 const fields = newBlock.fields.map(field => {
                   return { field: field.field, value: state.main };
@@ -105,6 +105,7 @@ export default function WizardBlocks(props) {
             onChange={e => setState({ ...state, main: e.target.value })}
             value={state.main}
           />
+          {wizardBlock.repeatChildren && <TextField />}
         </div>
       )}
     </div>
