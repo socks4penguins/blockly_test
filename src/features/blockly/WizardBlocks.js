@@ -64,27 +64,27 @@ export default function WizardBlocks(props) {
   }
 
   const wizardBlock =
-    selectedBlock && Object.keys(wizard_blocks).filter(type => selectedBlock.type === type)
-      ? wizard_blocks[Object.keys(wizard_blocks).filter(type => selectedBlock.type === type)[0]]
+    selectedBlock && wizard_blocks.filter(type => selectedBlock.type === type.parent)
+      ? wizard_blocks.filter(type => selectedBlock.type === type.parent)[0]
       : null;
   // console.log({ selectedBlock, empty: selectedBlock && getEmptyInputs(selectedBlock) });
   return (
     <div className="blockly-wizard-blocks vertical layout">
       <Typography variant="body1">Wizard{selectedBlock && ' - ' + selectedBlock.type}</Typography>
-      {wizardBlock && (
+      {wizardBlock && Blockly.selected && (
         <div className="horizontal layout justified">
           <TextField
             onBlur={e => {
               console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
-              wizardBlock.targets.forEach(target => {
-                const fields = target.fields.map(field => {
+              wizardBlock.create.forEach(newBlock => {
+                const fields = newBlock.fields.map(field => {
                   return { field: field.field, value: state.main };
                 });
                 connectBlockToInput({
                   parentBlock: selectedBlock,
                   // inputName: 'ADD0',
                   inputName: getEmptyInputs(selectedBlock, true)[0].name,
-                  childBlock: makeBlock({ type: target.type, fields }),
+                  childBlock: makeBlock({ type: newBlock.type, fields }),
                 });
               });
             }}

@@ -1,7 +1,32 @@
-export default {
-  lists_create_with: {
+export default [
+  {
+    parent: 'lists_create_with',
+    child: 'horizontal_menu_items',
+    prompt: 'horizontal items',
+    create: [
+      {
+        type: 'text',
+        fields: [{ field: 'TEXT' }],
+        prompt: 'text value',
+        repeat: true,
+      },
+    ],
+  },
+  {
+    parent: 'logic_compare',
+    create: [
+      {
+        type: 'text',
+        fields: [{ field: 'TEXT' }],
+        prompt: 'text value',
+        repeat: true,
+      },
+    ],
+  },
+  {
+    parent: 'text_join',
     // works
-    targets: [
+    create: [
       {
         type: 'text',
         fields: [{ field: 'TEXT' }],
@@ -10,8 +35,9 @@ export default {
       },
     ],
   },
-  logic_compare: {
-    targets: [
+  {
+    parent: 'lists_repeat',
+    create: [
       {
         type: 'text',
         fields: [{ field: 'TEXT' }],
@@ -20,25 +46,4 @@ export default {
       },
     ],
   },
-  text_join: {
-    // works
-    targets: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-  lists_repeat: {
-    targets: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-};
+];
