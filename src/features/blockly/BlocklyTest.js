@@ -26,7 +26,6 @@ export default function BlocklyTest() {
   });
 
   function handleWorkspaceChange(event) {
-    console.log({ event });
     setSelectedBlock(Blockly.selected);
     setCode(Blockly.JavaScript.workspaceToCode(workspace));
     var xml = Blockly.Xml.workspaceToDom(workspace);
@@ -39,7 +38,7 @@ export default function BlocklyTest() {
     <div className="blockly-blockly-test fit vertical layout">
       <div>blockly test</div>
       <div className="flex" ref={blocklyRef} />
-      <WizardBlocks selectedBlock={selectedBlock} />
+      <WizardBlocks selectedBlock={selectedBlock} workspace={workspace}/>
       <div className="horizontal layout full-width" style={{ height: '20%' }}>
         <div id="code" className="flex">
           {code}
