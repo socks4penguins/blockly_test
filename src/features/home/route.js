@@ -1,5 +1,6 @@
 import { WelcomePage } from './';
 import BlocklyTest from '../blockly/BlocklyTest';
+import Test from './Test';
 
 export default {
   path: '',
@@ -9,6 +10,9 @@ export default {
       component: WelcomePage,
       isIndex: true,
     },
-  
+    {
+      path: 'test',
+      component: Test,
+    },
   ],
 };
