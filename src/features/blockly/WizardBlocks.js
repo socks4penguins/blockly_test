@@ -42,22 +42,19 @@ export default function WizardBlocks(props) {
                     childBlock: makeBlock({
                       workspace,
                       type: valueInput.blockType,
-                      fieldsObject: state[valueInput.blockType],
+                      fieldsObject: state,
                     }),
                   });
-                  setState({ ...state, [valueInput.blockType]: {} });
+                  setState({});
                 }
               }}
               onChange={e =>
                 setState({
                   ...state,
-                  [valueInput.blockType]: {
-                    ...state[valueInput.blockType],
-                    [field.field]: e.target.value,
-                  },
+                  [field.field]: e.target.value,
                 })
               }
-              value={state[valueInput.blockType] && state[valueInput.blockType][field.prompt]}
+              value={state[field.field]}
             />
           );
         })}
