@@ -43,7 +43,7 @@ export default function WizardBlocks(props) {
                     childBlock: makeBlock({
                       workspace,
                       type: valueInput.blockType,
-                      fieldsObject: state[valueInput.blockType].fields,
+                      fieldsObject: state[valueInput.blockType],
                     }),
                   });
               }}
@@ -52,10 +52,7 @@ export default function WizardBlocks(props) {
                   ...state,
                   [valueInput.blockType]: {
                     ...state[valueInput.blockType],
-                    fields: {
-                      ...(state[valueInput.blockType] || {}).fields,
-                      [field.field]: e.target.value,
-                    },
+                    [field.field]: e.target.value,
                   },
                 })
               }
