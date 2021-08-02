@@ -31,33 +31,23 @@ export function connectBlockToInput({ parentBlock, inputName, childBlock }) {
   parentBlock.initSvg();
   parentBlock.render();
 
-  // var childBlock1 = workspace.newBlock('text');
-  // childBlock1.setFieldValue('Hello', 'TEXT');
-  // childBlock1.initSvg();
-  // childBlock1.render();
-
-  // var parentBlock1 = workspace.newBlock('text_print');
-  // parentBlock1.initSvg();
-  // parentBlock1.render();
-
-  // var parentConnection1 = parentBlock1.getInput('TEXT').connection;
-  // var childConnection1 = childBlock1.outputConnection;
-  // parentConnection1.connect(childConnection1);
+// if it didn't work make sure block was actually connected
+ 
 }
 
-export function getEmptyInputs(workspace, block, shouldMake) {
-  const empty = block.inputList.filter(
-    input => input.connection && input.connection.targetConnection === null,
-  );
+export function getEmptyInputs({ block, addMutation }) {
+         const empty = block.inputList.filter(
+           input => input.connection && input.connection.targetConnection === null,
+         );
 
-  if (empty.length > 0) return empty;
+         if (empty.length > 0) return empty;
 
-  if (shouldMake) {
-    // // add a new item
-    var new_input = block.appendInput_(1, 'ADD' + block.inputList.length);
-    block.itemCount_ = block.inputList.length;
-    return [new_input];
-  }
+         if (addMutation) {
+           // // add a new item
+           var new_input = block.appendInput_(1, 'ADD' + block.inputList.length);
+           block.itemCount_ = block.inputList.length;
+           return [new_input];
+         }
 
-  return [];
-}
+         return [];
+       }

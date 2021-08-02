@@ -35,7 +35,7 @@ export default function WizardBlocks(props) {
                 if (fieldIndex === valueInput.fields.length - 1)
                   connectBlockToInput({
                     parentBlock: selectedBlock,
-                    inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
+                    inputName: getEmptyInputs({ block: selectedBlock, addMutation: true })[0].name,
                     childBlock: makeBlock({
                       workspace,
                       type: valueInput.blockType,
