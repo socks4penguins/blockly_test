@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
 import wizard_blocks from '../../data/wizard_blocks';
 // import * as Blockly from 'blockly';
-import { connectBlockToInput, firstChildType, getEmptyInputs, makeBlock } from './blockly_helper';
+import {
+  blockFieldsHaveValues,
+  connectBlockToInput,
+  firstBlockOnMutator,
+  firstChildType,
+  getEmptyInputs,
+  makeBlock,
+  setFieldValues,
+} from './blockly_helper';
 // import PropTypes from 'prop-types';
 
 // const useFocus = () => {
@@ -58,19 +66,37 @@ export default function WizardBlocks(props) {
               inputRef={inputRef}
               label={field.prompt}
               onBlur={e => {
-                if (fieldIndex === valueInput.fields.length - 1) {
-                  connectBlockToInput({
-                    parentBlock: selectedBlock,
-                    inputName: getEmptyInputs({
-                      block: selectedBlock,
-                      addMutation: true,
-                    })[0].name,
-                    childBlock: makeBlock({
-                      workspace,
-                      type: valueInput.blockType,
-                      fieldsObject: state[repeatIndex] || {},
-                    }),
-                  });
+                if (
+                  fieldIndex === valueInput.fields.length - 1 &&
+                  (state[repeatIndex] || {})[field.field]
+                ) {
+                  if (
+                    blockFieldsHaveValues({
+                      block: firstBlockOnMutator(selectedBlock),
+                      fields: valueInput.fields,
+                    })
+                  )
+                    // make a new block
+                    connectBlockToInput({
+                      parentBlock: selectedBlock,
+                      inputName: getEmptyInputs({
+                        block: selectedBlock,
+                        addMutation: true,
+                      })[0].name,
+                      childBlock: makeBlock({
+                        workspace,
+                        type: valueInput.blockType,
+                        fieldsObject: state[repeatIndex] || {},
+                      }),
+                    });
+                  else {
+                    // use existing block
+                    console.log('populating first block');
+                    setFieldValues({
+                      block: firstBlockOnMutator(selectedBlock),
+                      fieldsObject: state[repeatIndex],
+                    });
+                  }
                   // setState({});
                   if (valueInput.repeat) {
                     setRepeater([...repeater, '']);

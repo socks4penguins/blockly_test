@@ -1,23 +1,20 @@
 export function makeBlock({ workspace, type, fields, fieldsObject }) {
   var childBlock = workspace.newBlock(type);
-  // debugger;
-  (
-    fields ||
-    Object.keys(fieldsObject).map(key => {
-      return { value: fieldsObject[key], field: key };
-    })
-  ).forEach(field => {
+  return setFieldValues({ block: childBlock, fields, fieldsObject });
+}
+
+export function setFieldValues({ block, fields, fieldsObject }) {
+  (fields || fieldsObject2fieldsArray(fieldsObject)).forEach(field => {
     try {
-      childBlock.setFieldValue(field.value, field.field);
+      block.setFieldValue(field.value, field.field);
     } catch {
       console.log("couldn't set field", field);
     }
   });
-  childBlock.initSvg();
-  childBlock.render();
-  return childBlock;
+  block.initSvg();
+  block.render();
+  return block;
 }
-
 export function firstChildType(block) {
   return block.childBlocks_.length > 0 && block.childBlocks_[0].type;
 }
@@ -49,4 +46,25 @@ export function getEmptyInputs({ block, addMutation }) {
   }
 
   return [];
+}
+
+export function firstBlockOnMutator(block) {
+  return block.childBlocks_[0];
+}
+
+export function blockFieldsHaveValues({ block, fields }) {
+  console.log('first blockFieldsHaveValues', block, fields);
+  var hasValues = false;
+  fields.forEach(field => {
+    // debugger;
+    if (block.getFieldValue(field.field) !== '') hasValues = true;
+  });
+  return hasValues;
+}
+
+export function fieldsObject2fieldsArray(fieldsObject) {
+  debugger
+  return Object.keys(fieldsObject).map(key => {
+    return { value: fieldsObject[key], field: key };
+  });
 }
