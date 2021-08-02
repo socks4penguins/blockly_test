@@ -30,6 +30,7 @@ export default [
       {
         // parentConnector: 'mutator',
         blockType: 'horizontal_menu_subitems',
+        repeat: true,
         fields: [
           {
             // fields of the child block

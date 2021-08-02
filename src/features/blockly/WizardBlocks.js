@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
 import wizard_blocks from '../../data/wizard_blocks';
 // import * as Blockly from 'blockly';
 import { connectBlockToInput, firstChildType, getEmptyInputs, makeBlock } from './blockly_helper';
 // import PropTypes from 'prop-types';
 
+// const useFocus = () => {
+//   const htmlElRef = useRef(null);
+//   const setFocus = () => {
+//     htmlElRef.current && htmlElRef.current.focus();
+//   };
+
+//   return [htmlElRef, setFocus];
+// };
+
 export default function WizardBlocks(props) {
   const { selectedBlock, workspace } = props;
   const [state, setState] = useState({});
+  const [repeater, setRepeater] = useState([1]);
 
-  console.log('first', selectedBlock);
+  // const [valueInputy, setValueInput] = useState({});
+  const inputRef = useRef(null);
+
+  // const [inputRef, setInputFocus] = useFocus();
+
+  // useEffect(() => {
+  //   if (valueInput && valueInput.repeat) {
+  //     console.log('repeat');
+  //     inputRef.current.focus();
+  //   }
+  // }, [valueInput, valueInput.repeat, inputRef]);
+
   const wizardConfig = selectedBlock && getConfig(selectedBlock);
 
   function getConfig(parentBlock) {
@@ -23,13 +44,18 @@ export default function WizardBlocks(props) {
   }
 
   function renderValueInput(valueInput, valueInputKey) {
-    // console.log({ valueInput });
+    // setValueInput(valueInput);
     return (
       <div className="vertical layout" key={valueInputKey}>
+        {/* <button onClick={setInputFocus} >set focus</button> */}
         {valueInput.fields.map((field, fieldIndex) => {
-          return (
+          return repeater.map((r, repeatIndex) => (
             <TextField
-              key={fieldIndex}
+              key={repeatIndex}
+              // inputRef={input => repeatIndex > 0 && input && input.focus()}
+              // inputProps={{ autoFocus: repeatIndex > 0 }}
+              autoFocus={repeatIndex > 0}
+              inputRef={inputRef}
               label={field.prompt}
               onBlur={e => {
                 if (fieldIndex === valueInput.fields.length - 1) {
@@ -42,21 +68,32 @@ export default function WizardBlocks(props) {
                     childBlock: makeBlock({
                       workspace,
                       type: valueInput.blockType,
-                      fieldsObject: state,
+                      fieldsObject: state[repeatIndex] || {},
                     }),
                   });
-                  setState({});
+                  // setState({});
+                  if (valueInput.repeat) {
+                    setRepeater([...repeater, '']);
+                    // bodge
+                    // setTimeout(() => {
+                    //   console.log({ inputRef });
+                    //   inputRef.current.click();
+                    // }, 300);
+                  }
                 }
               }}
               onChange={e =>
                 setState({
                   ...state,
-                  [field.field]: e.target.value,
+                  [repeatIndex]: {
+                    ...state[repeatIndex],
+                    [field.field]: e.target.value,
+                  },
                 })
               }
-              value={state[field.field]}
+              value={(state[repeatIndex] || {})[field.field] || ''}
             />
-          );
+          ));
         })}
       </div>
     );
