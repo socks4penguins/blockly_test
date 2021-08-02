@@ -22,6 +22,8 @@ export default [
         ],
       },
     ],
+    workspaceXml:
+      '<block type="horizontal_menu_item" id="75Ou1Ucxz=17`A_rxwvQ" x="120" y="110"><field name="leftIcon"></field><field name="text"></field><field name="rightIcon"></field><field name="position">left</field><value name="items"><block type="lists_create_with" id="5Ij=vo2tj;YQh;bF4iQ$"><mutation items="1"></mutation><value name="ADD0"><block type="horizontal_menu_subitems" id="IxAUW.5yZ|r|twYJ[]+b"><field name="leftIcon"></field><field name="text"></field><field name="rightIcon"></field><field name="position">left</field></block></value></block></value></block>',
   },
   {
     blockType: 'lists_create_with',

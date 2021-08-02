@@ -1,3 +1,4 @@
+import * as Blockly from 'blockly';
 export function makeBlock({ workspace, type, fields, fieldsObject }) {
   var childBlock = workspace.newBlock(type);
   return setFieldValues({ block: childBlock, fields, fieldsObject });
@@ -63,8 +64,39 @@ export function blockFieldsHaveValues({ block, fields }) {
 }
 
 export function fieldsObject2fieldsArray(fieldsObject) {
-  debugger
+  // debugger;
   return Object.keys(fieldsObject).map(key => {
     return { value: fieldsObject[key], field: key };
   });
 }
+
+export function makeBlockFromXml({ workspace, workspaceXml, fieldsObject }) {
+  var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(workspaceXml), workspace);
+  setFieldValues({ workspace, block, fieldsObject });
+  return block;
+}
+
+//  function makeDuplicateBlockWithEmptyValues({ workspace, block }) {
+//   // var newBlock = makeNewBlockWithEmptyValues({ workspace, block })
+//   // Save the clipboard.
+//   var clipboardXml = Blockly.clipboardXml_;
+//   var clipboardSource = Blockly.clipboardSource_;
+//   //   // Create a duplicate via a copy/paste operation.
+//   Blockly.copy(block);
+//   //  var block = Blockly.Xml.domToBlock(xmlBlock, this);
+
+//   //   toDuplicate.workspace.paste(Blockly.clipboardXml_);
+//   //   // Restore the clipboard.
+//   //   Blockly.clipboardXml_ = clipboardXml;
+//   //   Blockly.clipboardSource_ = clipboardSource;
+//   // };
+//   //  var block = Blockly.Xml.domToBlock(xmlBlock, this);
+// }
+
+// function getAllFields(block) {
+//   var fields = [];
+//   block.inputList.forEach(input => {
+//     fields = fields.concat(input.fieldRow);
+//   });
+//   return fields;
+// }

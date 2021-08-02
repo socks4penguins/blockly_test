@@ -9,6 +9,7 @@ import {
   firstChildType,
   getEmptyInputs,
   makeBlock,
+  makeBlockFromXml,
   setFieldValues,
 } from './blockly_helper';
 // import PropTypes from 'prop-types';
@@ -30,6 +31,7 @@ export default function WizardBlocks(props) {
   // const [valueInputy, setValueInput] = useState({});
   const inputRef = useRef(null);
 
+  console.log({selectedBlock})
   // const [inputRef, setInputFocus] = useFocus();
 
   // useEffect(() => {
@@ -83,9 +85,9 @@ export default function WizardBlocks(props) {
                         block: selectedBlock,
                         addMutation: true,
                       })[0].name,
-                      childBlock: makeBlock({
+                      childBlock: makeBlockFromXml({
                         workspace,
-                        type: valueInput.blockType,
+                        workspaceXml: wizardConfig.workspaceXml,
                         fieldsObject: state[repeatIndex] || {},
                       }),
                     });
