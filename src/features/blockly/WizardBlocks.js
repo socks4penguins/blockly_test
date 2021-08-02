@@ -10,14 +10,14 @@ export default function WizardBlocks(props) {
   const [state, setState] = useState({});
 
   // console.log('first', selectedBlock && firstChildType(selectedBlock));
-  const wizardBlock = selectedBlock && getEntryBlock(wizard_blocks);
+  const wizardConfig = selectedBlock && getConfig(selectedBlock);
 
-  function getEntryBlock(wizConfig) {
-    const blocks = wizConfig.filter(
+  function getConfig(parentBlock) {
+    const blocks = wizard_blocks.filter(
       wiz =>
-        selectedBlock.type === wiz.blockType &&
+        parentBlock.type === wiz.blockType &&
         (!wiz.valueInputs[0].blockType ||
-          firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
+          firstChildType(parentBlock) === wiz.valueInputs[0].blockType),
     );
     return blocks.length > 0 ? blocks[0] : null;
   }
@@ -32,16 +32,21 @@ export default function WizardBlocks(props) {
               key={fieldIndex}
               label={field.prompt}
               onBlur={e => {
-                if (fieldIndex === valueInput.fields.length - 1)
+                if (fieldIndex === valueInput.fields.length - 1) {
                   connectBlockToInput({
                     parentBlock: selectedBlock,
-                    inputName: getEmptyInputs({ block: selectedBlock, addMutation: true })[0].name,
+                    inputName: getEmptyInputs({
+                      block: selectedBlock,
+                      addMutation: true,
+                    })[0].name,
                     childBlock: makeBlock({
                       workspace,
                       type: valueInput.blockType,
                       fieldsObject: state[valueInput.blockType],
                     }),
                   });
+                  setState({ ...state, [valueInput.blockType]: {} });
+                }
               }}
               onChange={e =>
                 setState({
@@ -61,11 +66,11 @@ export default function WizardBlocks(props) {
   }
   return (
     <div className="blockly-wizard-blocks vertical layout">
-      <Typography variant="body1">Wizard{wizardBlock && ' - ' + wizardBlock.prompt}</Typography>
-      {wizardBlock && (
+      <Typography variant="body1">Wizard{wizardConfig && ' - ' + wizardConfig.prompt}</Typography>
+      {wizardConfig && (
         <div className="horizontal layout justified">
-          {wizardBlock.valueInputs.map(renderValueInput)}
-          {wizardBlock.repeatChildren && <TextField />}
+          {wizardConfig.valueInputs.map(renderValueInput)}
+          {wizardConfig.repeatChildren && <TextField />}
         </div>
       )}
     </div>

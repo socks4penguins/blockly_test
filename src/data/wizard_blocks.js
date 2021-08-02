@@ -3,7 +3,7 @@ export default [
     blockType: 'lists_create_with',
     valueInputs: [
       {
-        parentConnector: 'mutator',
+        // parentConnector: 'mutator',
         blockType: 'horizontal_menu_item',
         fields: [
           {
@@ -19,24 +19,21 @@ export default [
             prompt: 'icon',
           },
         ],
-        valueInputs: [
+      },
+    ],
+  },
+  {
+    blockType: 'lists_create_with',
+    valueInputs: [
+      {
+        // parentConnector: 'mutator',
+        blockType: 'horizontal_menu_subitems',
+        fields: [
           {
-            parentConnector: 'items',
-            blockType: 'list_create_with',
-            valueInputs: [
-              {
-                parentConnector: 'mutator',
-                blockType: 'horizontal_menu_subitems',
-                fields: [
-                  {
-                    // fields of the child block
-                    field: 'text', // the field to enter our input to
-                    inputType: 'text',
-                    prompt: 'menu subitem text',
-                  },
-                ],
-              },
-            ],
+            // fields of the child block
+            field: 'text', // the field to enter our input to
+            inputType: 'text',
+            prompt: 'menu subitem text',
           },
         ],
       },
