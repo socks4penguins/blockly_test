@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
-// import wizard_blocks from '../../data/wizard_blocks';
-import wizard_blocks from '../../data/wizard_blocks copy';
+import wizard_blocks from '../../data/wizard_blocks';
 // import * as Blockly from 'blockly';
 import { connectBlockToInput, firstChildType, getEmptyInputs, makeBlock } from './blockly_helper';
 // import PropTypes from 'prop-types';

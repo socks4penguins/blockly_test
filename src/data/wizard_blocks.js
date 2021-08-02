@@ -1,62 +1,44 @@
 export default [
   {
-    parent: 'lists_create_with',
-    child: 'horizontal_menu_item',
-    prompt: 'horizontal items',
-    repeatChildren: 'horizontal_menu_subitems',
-    create: [
+    blockType: 'lists_create_with',
+    valueInputs: [
       {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-  {
-    parent: 'lists_create_with',
-    child: 'horizontal_menu_subitems',
-    prompt: 'horizontal subitems',
-    create: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-  {
-    parent: 'logic_compare',
-    create: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-  {
-    parent: 'text_join',
-    // works
-    create: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
-      },
-    ],
-  },
-  {
-    parent: 'lists_repeat',
-    create: [
-      {
-        type: 'text',
-        fields: [{ field: 'TEXT' }],
-        prompt: 'text value',
-        repeat: true,
+        parentConnector: 'mutator',
+        blockType: 'horizontal_menu_item',
+        fields: [
+          {
+            // fields of the child block
+            field: 'text', // the field to enter our input to
+            inputType: 'text',
+            prompt: 'menu text',
+          },
+          {
+            // fields of the child block
+            field: 'leftIcon', // the field to enter our input to
+            inputType: 'text',
+            prompt: 'icon',
+          },
+        ],
+        valueInputs: [
+          {
+            parentConnector: 'items',
+            blockType: 'list_create_with',
+            valueInputs: [
+              {
+                parentConnector: 'mutator',
+                blockType: 'horizontal_menu_subitems',
+                fields: [
+                  {
+                    // fields of the child block
+                    field: 'text', // the field to enter our input to
+                    inputType: 'text',
+                    prompt: 'menu subitem text',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },
