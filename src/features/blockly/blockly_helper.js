@@ -1,7 +1,12 @@
-export function makeBlock({workspace, type, fields }) {
+export function makeBlock({ workspace, type, fields, fieldsObject }) {
   var childBlock = workspace.newBlock(type);
-  // debugger;
-  fields.forEach(field => {
+  debugger;
+  (
+    fields ||
+    Object.keys(fieldsObject).map(key => {
+      return { value: fieldsObject[key], field: key };
+    })
+  ).forEach(field => {
     try {
       childBlock.setFieldValue(field.value, field.field);
     } catch {

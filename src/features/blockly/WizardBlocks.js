@@ -27,26 +27,46 @@ export default function WizardBlocks(props) {
         )[0]
       : null;
   // console.log({ selectedBlock, wizardBlock });
-  function renderValueInput(valueInput) {
+  function renderValueInput(valueInput, valueInputKey) {
     console.log({ valueInput });
     return (
-      <div className="vertical layout">
-        
-        
-        <TextField
-          onBlur={e => {
-            const fields = valueInput.fields.map(field => {
-              return { field: field.field, value: state.main };
-            });
-            connectBlockToInput({
-              parentBlock: selectedBlock,
-              inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
-              childBlock: makeBlock({ workspace, type: valueInput.blockType, fields }),
-            });
-          }}
-          onChange={e => setState({ ...state, main: e.target.value })}
-          value={state.main}
-        />
+      <div className="vertical layout" key={valueInputKey}>
+        {valueInput.fields.map((field, fieldIndex) => {
+          // const fields = {
+          //   field: field.field,
+          //   value: state[valueInput.blockType] && state[valueInput.blockType][field.prompt],
+          // };
+          // console.log({ fields });
+          return (
+            <TextField
+              key={fieldIndex}
+              onBlur={e => {
+                connectBlockToInput({
+                  parentBlock: selectedBlock,
+                  inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
+                  childBlock: makeBlock({
+                    workspace,
+                    type: valueInput.blockType,
+                    fieldsObject: state[valueInput.blockType].fields,
+                  }),
+                });
+              }}
+              onChange={e =>
+                setState({
+                  ...state,
+                  [valueInput.blockType]: {
+                    ...state[valueInput.blockType],
+                    fields: {
+                      ...(state[valueInput.blockType] && state[valueInput.blockType][field.field]),
+                      [field.field]: e.target.value,
+                    },
+                  },
+                })
+              }
+              value={state[valueInput.blockType] && state[valueInput.blockType][field.prompt]}
+            />
+          );
+        })}
       </div>
     );
   }
