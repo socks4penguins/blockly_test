@@ -14,32 +14,15 @@ import {
 } from './blockly_helper';
 // import PropTypes from 'prop-types';
 
-// const useFocus = () => {
-//   const htmlElRef = useRef(null);
-//   const setFocus = () => {
-//     htmlElRef.current && htmlElRef.current.focus();
-//   };
-
-//   return [htmlElRef, setFocus];
-// };
-
 export default function WizardBlocks(props) {
   const { selectedBlock, workspace } = props;
   const [state, setState] = useState({});
-  const [repeater, setRepeater] = useState([1]);
-
-  // const [valueInputy, setValueInput] = useState({});
+  const [numberFields, setNumberFields] = useState(1);
   const inputRef = useRef(null);
 
-  console.log();
-  // const [inputRef, setInputFocus] = useFocus();
-
-  // useEffect(() => {
-  //   if (valueInput && valueInput.repeat) {
-  //     console.log('repeat');
-  //     inputRef.current.focus();
-  //   }
-  // }, [valueInput, valueInput.repeat, inputRef]);
+  React.useEffect(() => {
+    inputRef.current && inputRef.current.focus();
+  });
 
   const wizardConfig = selectedBlock && getConfig(selectedBlock);
 
@@ -53,73 +36,60 @@ export default function WizardBlocks(props) {
     return blocks.length > 0 ? blocks[0] : null;
   }
 
+  function commitBlock({ fieldIndex, valueInput, repeatIndex }) {
+    const field = valueInput.fields[fieldIndex];
+    if (fieldIndex === valueInput.fields.length - 1 && (state[repeatIndex] || {})[field.field]) {
+      if (
+        blockFieldsHaveValues({
+          block: firstBlockOnMutator(selectedBlock),
+          fields: valueInput.fields,
+        })
+      )
+        // make a new block
+        connectBlockToInput({
+          parentBlock: selectedBlock,
+          inputName: getEmptyInputs({
+            block: selectedBlock,
+            addMutation: true,
+          })[0].name,
+          childBlock: wizardConfig.workspaceXml
+            ? makeBlockFromXml({
+                workspace,
+                workspaceXml: wizardConfig.workspaceXml,
+                fieldsObject: state[repeatIndex] || {},
+              })
+            : makeBlock({
+                workspace,
+                type: valueInput.blockType,
+                fieldsObject: state[repeatIndex] || {},
+              }),
+        });
+      else {
+        // use existing block
+        setFieldValues({
+          block: firstBlockOnMutator(selectedBlock),
+          fieldsObject: state[repeatIndex],
+        });
+      }
+      // setState({});
+    }
+  }
   function renderValueInput(valueInput, valueInputKey) {
     return (
       <div className="vertical layout" key={valueInputKey}>
-        {/* <button onClick={setInputFocus} >set focus</button> */}
         {valueInput.fields.map((field, fieldIndex) => {
-          return repeater.map((r, repeatIndex) => (
+          return [...Array(numberFields)].map((r, repeatIndex) => (
             <TextField
+              disabled={repeatIndex < numberFields - 1}
               key={repeatIndex}
-              // inputRef={input => repeatIndex > 0 && input && input.focus()}
-              // inputProps={{ autoFocus: repeatIndex > 0 }}
-              autoFocus={repeatIndex > 0}
-              inputRef={inputRef}
+              inputRef={
+                valueInput.repeat ? (repeatIndex === numberFields - 1 ? inputRef : null) : null
+              }
               label={field.prompt}
               onKeyPress={e => {
-                console.log('key', e.key);
                 if (e.key === 'Enter') {
-                  setRepeater([''])
-                  setState({})
-                }
-              }}
-              onBlur={e => {
-                if (
-                  fieldIndex === valueInput.fields.length - 1 &&
-                  (state[repeatIndex] || {})[field.field]
-                ) {
-                  if (
-                    blockFieldsHaveValues({
-                      block: firstBlockOnMutator(selectedBlock),
-                      fields: valueInput.fields,
-                    })
-                  )
-                    // make a new block
-                    connectBlockToInput({
-                      parentBlock: selectedBlock,
-                      inputName: getEmptyInputs({
-                        block: selectedBlock,
-                        addMutation: true,
-                      })[0].name,
-                      childBlock: wizardConfig.workspaceXml
-                        ? makeBlockFromXml({
-                            workspace,
-                            workspaceXml: wizardConfig.workspaceXml,
-                            fieldsObject: state[repeatIndex] || {},
-                          })
-                        : makeBlock({
-                            workspace,
-                            type: valueInput.blockType,
-                            fieldsObject: state[repeatIndex] || {},
-                          }),
-                    });
-                  else {
-                    // use existing block
-                    console.log('populating first block');
-                    setFieldValues({
-                      block: firstBlockOnMutator(selectedBlock),
-                      fieldsObject: state[repeatIndex],
-                    });
-                  }
-                  // setState({});
-                  if (valueInput.repeat) {
-                    setRepeater([...repeater, '']);
-                    // bodge, didn't work, can't set focus
-                    // setTimeout(() => {
-                    //   console.log({ inputRef });
-                    //   inputRef.current.click();
-                    // }, 300);
-                  }
+                  commitBlock({ fieldIndex, valueInput, repeatIndex });
+                  if (valueInput.repeat) setNumberFields(numberFields + 1);
                 }
               }}
               onChange={e =>

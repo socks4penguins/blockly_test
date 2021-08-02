@@ -9,12 +9,14 @@ export default function Test() {
   useEffect(() => {
     inputRef.current && inputRef.current.focus();
   });
+
   return (
     <div className="home-test">
       {[...Array(numberFields)].map((field, index) => (
         <TextField
+          key={index}
           label={`field ${index}`}
-          onBlur={e => setNumberFields(numberFields + 1)}
+          onKeyPress={e => e.key === 'Enter' && setNumberFields(numberFields + 1)}
           inputRef={index === numberFields - 1 ? inputRef : null}
         />
       ))}
