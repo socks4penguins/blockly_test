@@ -54,7 +54,6 @@ export default function WizardBlocks(props) {
   }
 
   function renderValueInput(valueInput, valueInputKey) {
-    // setValueInput(valueInput);
     return (
       <div className="vertical layout" key={valueInputKey}>
         {/* <button onClick={setInputFocus} >set focus</button> */}
@@ -67,6 +66,13 @@ export default function WizardBlocks(props) {
               autoFocus={repeatIndex > 0}
               inputRef={inputRef}
               label={field.prompt}
+              onKeyPress={e => {
+                console.log('key', e.key);
+                if (e.key === 'Enter') {
+                  setRepeater([''])
+                  setState({})
+                }
+              }}
               onBlur={e => {
                 if (
                   fieldIndex === valueInput.fields.length - 1 &&
@@ -108,7 +114,7 @@ export default function WizardBlocks(props) {
                   // setState({});
                   if (valueInput.repeat) {
                     setRepeater([...repeater, '']);
-                    // bodge
+                    // bodge, didn't work, can't set focus
                     // setTimeout(() => {
                     //   console.log({ inputRef });
                     //   inputRef.current.click();
