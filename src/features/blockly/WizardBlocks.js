@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
-import wizard_blocks from '../../data/wizard_blocks';
+// import wizard_blocks from '../../data/wizard_blocks';
+import wizard_blocks from '../../data/wizard_blocks copy';
 import * as Blockly from 'blockly';
 import { connectBlockToInput, firstChildType, getEmptyInputs, makeBlock } from './blockly_helper';
 // import PropTypes from 'prop-types';
@@ -16,13 +17,13 @@ export default function WizardBlocks(props) {
     selectedBlock &&
     wizard_blocks.filter(
       wiz =>
-        selectedBlock.type === wiz.parent &&
-        (!wiz.child || firstChildType(selectedBlock) === wiz.child),
+        selectedBlock.type === wiz.blockType &&
+        (!wiz.valueInputs[0].blockType || firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
     ).length > 0
       ? wizard_blocks.filter(
           wiz =>
-            selectedBlock.type === wiz.parent &&
-            (!wiz.child || firstChildType(selectedBlock) === wiz.child),
+            selectedBlock.type === wiz.blockType &&
+            (!wiz.valueInputs[0].blockType || firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
         )[0]
       : null;
   // console.log({ selectedBlock, wizardBlock });
@@ -34,7 +35,7 @@ export default function WizardBlocks(props) {
           <TextField
             onBlur={e => {
               // console.log('blur', wizardBlock, state.main, getEmptyInputs(selectedBlock));
-              wizardBlock.create.forEach(newBlock => {
+              wizardBlock.valueInputs.forEach(newBlock => {
                 const fields = newBlock.fields.map(field => {
                   return { field: field.field, value: state.main };
                 });
@@ -42,7 +43,7 @@ export default function WizardBlocks(props) {
                   parentBlock: selectedBlock,
                   // inputName: 'ADD0',
                   inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
-                  childBlock: makeBlock({workspace, type: newBlock.type, fields }),
+                  childBlock: makeBlock({workspace, type: newBlock.blockType, fields }),
                 });
               });
             }}
