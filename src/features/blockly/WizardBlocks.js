@@ -11,21 +11,18 @@ export default function WizardBlocks(props) {
   const [state, setState] = useState({});
 
   // console.log('first', selectedBlock && firstChildType(selectedBlock));
-  const wizardBlock =
-    selectedBlock &&
-    wizard_blocks.filter(
+  const wizardBlock = selectedBlock && getEntryBlock(wizard_blocks);
+
+  function getEntryBlock(wizConfig) {
+    const blocks = wizConfig.filter(
       wiz =>
         selectedBlock.type === wiz.blockType &&
         (!wiz.valueInputs[0].blockType ||
           firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
-    ).length > 0
-      ? wizard_blocks.filter(
-          wiz =>
-            selectedBlock.type === wiz.blockType &&
-            (!wiz.valueInputs[0].blockType ||
-              firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
-        )[0]
-      : null;
+    );
+    return blocks.length > 0 ? blocks[0] : null;
+  }
+
   function renderValueInput(valueInput, valueInputKey) {
     console.log({ valueInput });
     return (
