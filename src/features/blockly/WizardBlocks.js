@@ -31,7 +31,7 @@ export default function WizardBlocks(props) {
   // const [valueInputy, setValueInput] = useState({});
   const inputRef = useRef(null);
 
-  console.log({selectedBlock})
+  console.log();
   // const [inputRef, setInputFocus] = useFocus();
 
   // useEffect(() => {
@@ -85,11 +85,17 @@ export default function WizardBlocks(props) {
                         block: selectedBlock,
                         addMutation: true,
                       })[0].name,
-                      childBlock: makeBlockFromXml({
-                        workspace,
-                        workspaceXml: wizardConfig.workspaceXml,
-                        fieldsObject: state[repeatIndex] || {},
-                      }),
+                      childBlock: wizardConfig.workspaceXml
+                        ? makeBlockFromXml({
+                            workspace,
+                            workspaceXml: wizardConfig.workspaceXml,
+                            fieldsObject: state[repeatIndex] || {},
+                          })
+                        : makeBlock({
+                            workspace,
+                            type: valueInput.blockType,
+                            fieldsObject: state[repeatIndex] || {},
+                          }),
                     });
                   else {
                     // use existing block
