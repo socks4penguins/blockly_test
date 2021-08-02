@@ -9,7 +9,7 @@ export default function WizardBlocks(props) {
   const { selectedBlock, workspace } = props;
   const [state, setState] = useState({});
 
-  // console.log('first', selectedBlock && firstChildType(selectedBlock));
+  console.log('first', selectedBlock);
   const wizardConfig = selectedBlock && getConfig(selectedBlock);
 
   function getConfig(parentBlock) {
@@ -23,7 +23,7 @@ export default function WizardBlocks(props) {
   }
 
   function renderValueInput(valueInput, valueInputKey) {
-    console.log({ valueInput });
+    // console.log({ valueInput });
     return (
       <div className="vertical layout" key={valueInputKey}>
         {valueInput.fields.map((field, fieldIndex) => {
@@ -62,13 +62,18 @@ export default function WizardBlocks(props) {
     );
   }
   return (
-    <div className="blockly-wizard-blocks vertical layout">
-      <Typography variant="body1">Wizard{wizardConfig && ' - ' + wizardConfig.prompt}</Typography>
-      {wizardConfig && (
-        <div className="horizontal layout justified">
-          {wizardConfig.valueInputs.map(renderValueInput)}
-          {wizardConfig.repeatChildren && <TextField />}
-        </div>
+    <div className="blockly-wizard-blocks horizontal layout start">
+      <div className="vertical layout center">
+        <Typography variant="body1">{wizardConfig && wizardConfig.prompt}</Typography>
+        {wizardConfig && (
+          <div className="horizontal layout justified">
+            {wizardConfig.valueInputs.map(renderValueInput)}
+            {wizardConfig.repeatChildren && <TextField />}
+          </div>
+        )}
+      </div>
+      {selectedBlock && selectedBlock.childBlocks_.length > 0 && (
+        <WizardBlocks selectedBlock={selectedBlock.childBlocks_[0]} workspace={workspace} />
       )}
     </div>
   );

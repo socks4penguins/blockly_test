@@ -1,6 +1,7 @@
 export default [
   {
     blockType: 'lists_create_with',
+    prompt: 'Menu Items',
     valueInputs: [
       {
         // parentConnector: 'mutator',
@@ -24,6 +25,7 @@ export default [
   },
   {
     blockType: 'lists_create_with',
+    prompt: 'Sub-items',
     valueInputs: [
       {
         // parentConnector: 'mutator',
