@@ -1,6 +1,6 @@
 export function makeBlock({ workspace, type, fields, fieldsObject }) {
   var childBlock = workspace.newBlock(type);
-  debugger;
+  // debugger;
   (
     fields ||
     Object.keys(fieldsObject).map(key => {

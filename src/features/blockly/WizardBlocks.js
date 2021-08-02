@@ -53,7 +53,7 @@ export default function WizardBlocks(props) {
                   [valueInput.blockType]: {
                     ...state[valueInput.blockType],
                     fields: {
-                      ...(state[valueInput.blockType] && state[valueInput.blockType][field.field]),
+                      ...(state[valueInput.blockType] || {}).fields,
                       [field.field]: e.target.value,
                     },
                   },
