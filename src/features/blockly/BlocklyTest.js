@@ -24,9 +24,9 @@ export default function BlocklyTest() {
     initialXml: ConfigFiles.INITIAL_XML,
     onWorkspaceChange: handleWorkspaceChange,
   });
-
+ 
   function handleWorkspaceChange(event) {
-    console.log('selected', Blockly.selected);
+    // console.log('selected', Blockly.selected);
     // Blockly.selected && Blockly.selected.select();
     // const sel = Blockly.selected
     // Blockly.selected && Blockly.selected.unselect();
