@@ -12,6 +12,12 @@ export default [
             inputType: 'text',
             prompt: 'menu text',
           },
+          {
+            // fields of the child block
+            field: 'leftIcon', // the field to enter our input to
+            inputType: 'text',
+            prompt: 'icon',
+          },
         ],
         valueInputs: [
           {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Typography, TextField } from '@material-ui/core';
 // import wizard_blocks from '../../data/wizard_blocks';
 import wizard_blocks from '../../data/wizard_blocks copy';
-import * as Blockly from 'blockly';
+// import * as Blockly from 'blockly';
 import { connectBlockToInput, firstChildType, getEmptyInputs, makeBlock } from './blockly_helper';
 // import PropTypes from 'prop-types';
 
@@ -26,30 +26,26 @@ export default function WizardBlocks(props) {
               firstChildType(selectedBlock) === wiz.valueInputs[0].blockType),
         )[0]
       : null;
-  // console.log({ selectedBlock, wizardBlock });
   function renderValueInput(valueInput, valueInputKey) {
     console.log({ valueInput });
     return (
       <div className="vertical layout" key={valueInputKey}>
         {valueInput.fields.map((field, fieldIndex) => {
-          // const fields = {
-          //   field: field.field,
-          //   value: state[valueInput.blockType] && state[valueInput.blockType][field.prompt],
-          // };
-          // console.log({ fields });
           return (
             <TextField
               key={fieldIndex}
+              label={field.prompt}
               onBlur={e => {
-                connectBlockToInput({
-                  parentBlock: selectedBlock,
-                  inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
-                  childBlock: makeBlock({
-                    workspace,
-                    type: valueInput.blockType,
-                    fieldsObject: state[valueInput.blockType].fields,
-                  }),
-                });
+                if (fieldIndex === valueInput.fields.length - 1)
+                  connectBlockToInput({
+                    parentBlock: selectedBlock,
+                    inputName: getEmptyInputs(workspace, selectedBlock, true)[0].name,
+                    childBlock: makeBlock({
+                      workspace,
+                      type: valueInput.blockType,
+                      fieldsObject: state[valueInput.blockType].fields,
+                    }),
+                  });
               }}
               onChange={e =>
                 setState({
