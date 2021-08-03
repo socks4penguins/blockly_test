@@ -1,5 +1,3 @@
-image:
-  file: .gitpod.Dockerfile
 ports:
   - port: 6080
     onOpen: open-preview
@@ -9,9 +7,6 @@ ports:
     onOpen: ignore
 tasks:
   - init: >
-      npm install &&
-      npm install -g vsce &&
-      echo "y" | vsce package;
+      npm install;
     command: >
-      /usr/bin/code --install-extension *.vsix &&
-      /usr/bin/code
+      npm i -g rekit;
