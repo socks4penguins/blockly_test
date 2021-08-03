@@ -17,15 +17,33 @@ import {
 export default function WizardBlocks(props) {
   const { selectedBlock, workspace } = props;
   const [state, setState] = useState({});
+  const [wizardIndex, setWizardIndex] = useState(null);
+  const [activeWizard, setActiveWizard] = useState(null);
   const [numberFields, setNumberFields] = useState(1);
   const inputRef = useRef(null);
 
   React.useEffect(() => {
-    inputRef.current && inputRef.current.focus();
-  });
+    // the first instance of the wizard assigns itself as the current active one
+    if (props.wizardIndex === undefined) {
+      console.log('self assigning active first one only', props.wizardIndex);
+      setWizardIndex(0);
+      setActiveWizard(0);
+    } else {
+      setWizardIndex(props.wizardIndex);
+      setActiveWizard(props.activeWizard);
+    }
+  }, [setWizardIndex, setActiveWizard, props.activeWizard, props.wizardIndex]);
+
+  React.useEffect(() => {
+    // only get focus if we are the active one
+    if (activeWizard === wizardIndex && inputRef.current) {
+      // console.log('setting focus', wizardIndex, numberFields);
+      inputRef.current.focus();
+    }
+  }, [activeWizard, wizardIndex, numberFields]);
 
   const wizardConfig = selectedBlock && getConfig(selectedBlock);
-
+  if (!wizardConfig && activeWizard === wizardIndex) setActiveWizard(activeWizard + 1);
   function getConfig(parentBlock) {
     const blocks = wizard_blocks.filter(
       wiz =>
@@ -72,6 +90,8 @@ export default function WizardBlocks(props) {
         });
       }
       // setState({});
+      // only move to next wizard if this one doesn't repeat
+      !wizardConfig.valueInputs[0].repeat && setActiveWizard(activeWizard + 1);
     }
   }
   function renderValueInput(valueInput, valueInputKey) {
@@ -80,7 +100,7 @@ export default function WizardBlocks(props) {
         {valueInput.fields.map((field, fieldIndex) => {
           return [...Array(numberFields)].map((r, repeatIndex) => (
             <TextField
-              disabled={repeatIndex < numberFields - 1}
+              disabled={wizardIndex !== activeWizard || repeatIndex < numberFields - 1}
               key={repeatIndex}
               inputRef={
                 valueInput.repeat ? (repeatIndex === numberFields - 1 ? inputRef : null) : null
@@ -111,6 +131,9 @@ export default function WizardBlocks(props) {
   return (
     <div className="blockly-wizard-blocks horizontal layout start">
       <div className="vertical layout center">
+        {/* <Typography variant="body1">
+          index:{wizardIndex} active:{activeWizard}
+        </Typography> */}
         <Typography variant="body1">{wizardConfig && wizardConfig.prompt}</Typography>
         {wizardConfig && (
           <div className="horizontal layout justified">
@@ -120,7 +143,13 @@ export default function WizardBlocks(props) {
         )}
       </div>
       {selectedBlock && selectedBlock.childBlocks_.length > 0 && (
-        <WizardBlocks selectedBlock={selectedBlock.childBlocks_[0]} workspace={workspace} />
+        <WizardBlocks
+          selectedBlock={selectedBlock.childBlocks_[0]}
+          workspace={workspace}
+          wizardIndex={wizardIndex + 1}
+          activeWizard={activeWizard}
+          setActiveWizard={setActiveWizard}
+        />
       )}
     </div>
   );

@@ -54,7 +54,7 @@ export function firstBlockOnMutator(block) {
 }
 
 export function blockFieldsHaveValues({ block, fields }) {
-  console.log('first blockFieldsHaveValues', block, fields);
+  // console.log('first blockFieldsHaveValues', block, fields);
   var hasValues = false;
   fields.forEach(field => {
     // debugger;
