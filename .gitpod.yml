@@ -1,10 +1,6 @@
 ports:
-  - port: 6080
+  - port: 3100
     onOpen: open-preview
-  - port: 35900
-    onOpen: ignore
-  - port: 5900
-    onOpen: ignore
 tasks:
   - init: >
       npm install;
