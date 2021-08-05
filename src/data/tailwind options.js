@@ -3,44 +3,52 @@ const groupHover = { name: 'group-hover' };
 const focus = { name: 'focus' };
 const focusWithin = { name: 'focus-within' };
 const numberValues = [
-  '	0',
-  '	1',
-  '	2',
-  '	3',
-  '	4',
-  '	5',
-  '	6',
-  '	7',
-  '	8',
-  '	9',
-  '	10',
-  '	11',
-  '	12',
-  '	14',
-  '	16',
-  '	20',
-  '	24',
-  '	28',
-  '	32',
-  '	36',
-  '	40',
-  '	44',
-  '	48',
-  '	52',
-  '	56',
-  '	60',
-  '	64',
-  '	72',
-  '	80',
-  '	96',
-  '	px',
-  '	0.5',
-  '	1.5',
-  '	2.5',
-  '	3.5',
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  '14',
+  '16',
+  '20',
+  '24',
+  '28',
+  '32',
+  '36',
+  '40',
+  '44',
+  '48',
+  '52',
+  '56',
+  '60',
+  '64',
+  '72',
+  '80',
+  '96',
+  'px',
+  '0.5',
+  '1.5',
+  '2.5',
+  '3.5',
 ];
 
 function makeNumberValues(text, description) {
+  var out = [];
+  numberValuePrefixes(text).forEach(prefix => {
+    out = out.concat(numberValues.map(value => `${prefix.name}${value}`));
+  });
+  return out
+}
+
+function numberValuePrefixes(text, description) {
   return [
     { name: `.${text}-`, description: `${description}` },
     { name: `.${text}x-`, description: `${description} x-axis` },
@@ -133,7 +141,7 @@ export const tailwind_options = [
       {
         name: 'display',
         selectors: [
-          '	hidden',
+          'hidden',
           '.block',
           '.inline-block',
           '.inline',
@@ -215,17 +223,17 @@ export const tailwind_options = [
     items: [
       {
         name: 'padding',
-        selectors: [makeNumberValues('p', 'padding'), numberValues],
+        selectors: [...makeNumberValues('p')],
         description: 'Controls padding in 0.25rem increments.',
       },
       {
         name: 'margin',
-        selectors: [makeNumberValues('m', 'margin'), numberValues],
+        selectors: [...makeNumberValues('m')],
         description: 'Controls margin in 0.25rem increments.',
       },
       {
         name: 'space between',
-        selectors: [makeNumberValues('space', 'space between'), numberValues],
+        selectors: [...makeNumberValues('space', 'space between')],
         description:
           'Sets left or top (x or y) margin between child elements, but skips the first element.',
       },
