@@ -76,6 +76,9 @@ export function makeBlockFromXml({ workspace, workspaceXml, fieldsObject }) {
   return block;
 }
 
+export function getLastChild(block) {
+  return block.childBlocks_ && block.childBlocks_[block.childBlocks_.length - 1];
+}
 //  function makeDuplicateBlockWithEmptyValues({ workspace, block }) {
 //   // var newBlock = makeNewBlockWithEmptyValues({ workspace, block })
 //   // Save the clipboard.

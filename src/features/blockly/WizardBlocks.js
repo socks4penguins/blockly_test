@@ -8,6 +8,7 @@ import {
   firstBlockOnMutator,
   firstChildType,
   getEmptyInputs,
+  getLastChild,
   makeBlock,
   makeBlockFromXml,
   setFieldValues,
@@ -56,6 +57,7 @@ export default function WizardBlocks(props) {
 
   function commitBlock({ fieldIndex, valueInput, repeatIndex }) {
     const field = valueInput.fields[fieldIndex];
+    // if last field in block or input is repeating (i.e. finished editing)
     if (fieldIndex === valueInput.fields.length - 1 && (state[repeatIndex] || {})[field.field]) {
       if (
         blockFieldsHaveValues({
@@ -144,7 +146,7 @@ export default function WizardBlocks(props) {
       </div>
       {selectedBlock && selectedBlock.childBlocks_.length > 0 && (
         <WizardBlocks
-          selectedBlock={selectedBlock.childBlocks_[0]}
+          selectedBlock={getLastChild(selectedBlock)}
           workspace={workspace}
           wizardIndex={wizardIndex + 1}
           activeWizard={activeWizard}
