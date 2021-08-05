@@ -9,6 +9,14 @@ function getTailwindItems(selectedGroup) {
     .map(item => [item.name, item.name]);
 }
 
+function getTailwindClass(selectedGroup, selectedItem) {
+  // console.log(tailwind_options.filter(group => group.name === 'Layout'));
+  return tailwind_options
+    .filter(group => group.items && group.name.toLowerCase() === selectedGroup)[0]
+    .items.filter(item => item.name === selectedItem)[0]
+    .selectors.map(item => [item, item]);
+}
+
 Blockly.Blocks['tailwind_dropdown'] = {
   init: function() {
     this.appendValueInput('next')
@@ -19,6 +27,7 @@ Blockly.Blocks['tailwind_dropdown'] = {
           ['spacing', 'spacing'],
           ['background', 'background'],
           // ['transform', 'transform'],
+          ['border', 'border'],
           ['effects', 'effects'],
           ['flexbox', 'flexbox'],
         ]),
@@ -27,6 +36,12 @@ Blockly.Blocks['tailwind_dropdown'] = {
       .appendField(
         new Blockly.FieldDropdown(() => getTailwindItems(this.getFieldValue('group'))),
         'options',
+      )
+      .appendField(
+        new Blockly.FieldDropdown(() =>
+          getTailwindClass(this.getFieldValue('group'), this.getFieldValue('options')),
+        ),
+        'selector',
       );
     this.setOutput(true, null);
     this.setColour(165);
@@ -43,24 +58,39 @@ Blockly.Blocks['tailwind_dropdown'] = {
         console.log('new value', event.newValue);
         if (event.name === 'group') {
           this.getInput('next').removeField('options');
-          // setTimeout(() => {
+          this.getInput('next').removeField('selector');
           this.getInput('next').appendField(
             new Blockly.FieldDropdown(() => getTailwindItems(this.getFieldValue('group'))),
             'options',
           );
-          // }, 100);
-          // this.setFieldValue(getTailwindItems(event.newValue)[0][1], 'options');
-
-          // change in table, update column_input and column_input1
-          // this.getInput('column_input').removeField('column_input_field')
-          // this.getInput('column_input')
-          //   .appendField(new Blockly.FieldDropdown(
-          //     function () {
-          //       let options = []
-          //       return options
-          //     }
-          //   ), 'column_input_field')
+          this.getInput('next').appendField(
+            new Blockly.FieldDropdown(() =>
+              getTailwindClass(this.getFieldValue('group'), this.getFieldValue('options')),
+            ),
+            'selector',
+          );
         }
+        if (event.name === 'options') {
+          this.getInput('next').removeField('selector');
+          this.getInput('next').appendField(
+            new Blockly.FieldDropdown(() =>
+              getTailwindClass(this.getFieldValue('group'), this.getFieldValue('options')),
+            ),
+            'selector',
+          );
+        }
+
+        // this.setFieldValue(getTailwindItems(event.newValue)[0][1], 'options');
+
+        // change in table, update column_input and column_input1
+        // this.getInput('column_input').removeField('column_input_field')
+        // this.getInput('column_input')
+        //   .appendField(new Blockly.FieldDropdown(
+        //     function () {
+        //       let options = []
+        //       return options
+        //     }
+        //   ), 'column_input_field')
       }
     }
   },

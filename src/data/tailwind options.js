@@ -40,12 +40,24 @@ const numberValues = [
   '3.5',
 ];
 
-function makeNumberValues(text, description) {
+function makeNumberValues(text, values) {
   var out = [];
   numberValuePrefixes(text).forEach(prefix => {
-    out = out.concat(numberValues.map(value => `${prefix.name}${value}`));
+    out = out.concat(values.map(value => `${prefix.name}${value}`));
   });
-  return out
+  return out;
+}
+
+// function makeSpacingValues(text, values) {
+//   var out = [];
+//   values.forEach(prefix => {
+//     out = out.concat(values.map(value => `${prefix.name}${value}`));
+//   });
+//   return out;
+// }
+
+function makePercentageValues(text) {
+  return percentageValues.map(val => `${text}${val}`);
 }
 
 function numberValuePrefixes(text, description) {
@@ -78,24 +90,24 @@ const percentageValues = [
   '100',
 ];
 
-function makePercentageValues(text, description) {
-  return [
-    { name: `.${text}-`, description: `${description}` },
-    { name: `.${text}x-`, description: `${description} x-axis` },
-    { name: `.${text}y-`, description: `${description} y-axis` },
-    { name: `.${text}t-`, description: `${description} top` },
-    { name: `.${text}b-`, description: `${description} bottom` },
-    { name: `.${text}l-`, description: `${description} left` },
-    { name: `.${text}r-`, description: `${description} right` },
-  ];
-}
+// function makePercentageValues(text, description) {
+//   return [
+//     { name: `.${text}-`, description: `${description}` },
+//     { name: `.${text}x-`, description: `${description} x-axis` },
+//     { name: `.${text}y-`, description: `${description} y-axis` },
+//     { name: `.${text}t-`, description: `${description} top` },
+//     { name: `.${text}b-`, description: `${description} bottom` },
+//     { name: `.${text}l-`, description: `${description} left` },
+//     { name: `.${text}r-`, description: `${description} right` },
+//   ];
+// }
 
 const breakpoints = [
-  { name: ':sm', description: 'width < 640px' },
-  { name: ':md', description: 'width < 768px' },
-  { name: ':lg', description: 'width < 1024px' },
-  { name: ':xl', description: 'width < 1280px' },
-  { name: ':2xl', description: 'width < 1536px' },
+  { name: 'sm', description: 'width < 640px' },
+  { name: 'md', description: 'width < 768px' },
+  { name: 'lg', description: 'width < 1024px' },
+  { name: 'xl', description: 'width < 1280px' },
+  { name: '2xl', description: 'width < 1536px' },
 ];
 
 const colorValues = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
@@ -106,7 +118,8 @@ function makeColors(text) {
   colors.forEach(color => {
     outColors = outColors.concat(colorValues.map(value => `${color}-${value}`));
   });
-  return ['transparent', 'current', 'black', 'white', ...outColors.map(color => `${text}${color}`)];
+  outColors = ['transparent', 'current', 'black', 'white'].concat(outColors);
+  return outColors.map(color => `${text}${color}`);
 }
 
 const positionValues = [
@@ -223,20 +236,20 @@ export const tailwind_options = [
     items: [
       {
         name: 'padding',
-        selectors: [...makeNumberValues('p')],
+        selectors: makeNumberValues('p', numberValues),
         description: 'Controls padding in 0.25rem increments.',
       },
       {
         name: 'margin',
-        selectors: [...makeNumberValues('m')],
+        selectors: makeNumberValues('m', numberValues),
         description: 'Controls margin in 0.25rem increments.',
       },
-      {
-        name: 'space between',
-        selectors: [...makeNumberValues('space', 'space between')],
-        description:
-          'Sets left or top (x or y) margin between child elements, but skips the first element.',
-      },
+      // {
+      //   name: 'space between',
+      //   selectors:  ['x','y'].map(dir=>``sdafdsfs),
+      //   description:
+      //     'Sets left or top (x or y) margin between child elements, but skips the first element.',
+      // },
     ],
   },
   {
@@ -245,14 +258,14 @@ export const tailwind_options = [
     items: [
       {
         name: 'background opacity',
-        selectors: [makePercentageValues('bg-opacity', 'opacity'), percentageValues],
+        selectors: makePercentageValues('.bg-opacity-'),
         description: '',
       },
       { name: 'background-attachment', description: '' },
       { name: 'background-clip', description: '' },
       {
         name: 'background-color',
-        selectors: makeColors('.gb-'),
+        selectors: makeColors('.bg-'),
         description: 'backgroundColor',
       },
       {
@@ -262,7 +275,7 @@ export const tailwind_options = [
       },
       {
         name: 'background-position',
-        selectors: makePositions('.bg'),
+        selectors: makePositions('.bg-'),
         description: 'Sets position of a background image.',
       },
       { name: 'background-repeat', description: '' },
@@ -296,10 +309,19 @@ export const tailwind_options = [
     items: [
       {
         name: 'box-shadow',
-        selectors: [['.shadow', 'inner', 'none', ...breakpoints.map(bp => `.shadow-${bp}`)]],
+        selectors: [
+          '.shadow',
+          '.shadow-inner',
+          '.shadow-none',
+          ...breakpoints.map(bp => `.shadow-${bp.name}`),
+        ],
         description: '',
       },
-      { name: 'opacity', selectors: [makePercentageValues('.opacity')], description: '' },
+      {
+        name: 'opacity',
+        selectors: makePercentageValues('.opacity-'),
+        description: '',
+      },
       { name: 'mix-blend-mode', description: '' },
       { name: 'background-blend-mode', description: '' },
     ],
@@ -311,25 +333,29 @@ export const tailwind_options = [
       //  { name: 'display', selectors: [], description: '' },
       {
         name: 'flex',
-        selectors: [['.flex-1', '.flex-auto', '.flex-initial', '.flex-none']],
+        selectors: ['.flex-1', '.flex-auto', '.flex-initial', '.flex-none'],
         description: 'Controls how flex items grow and shrink.',
       },
       {
         name: 'flex-direction',
-        selectors: [['.flex-row', '.flex-row-reverse', '.flex-col', '.flex-col-reverse']],
+        selectors: ['.flex-row', '.flex-row-reverse', '.flex-col', '.flex-col-reverse'],
         description: 'Sets direction of flex items.',
       },
       {
         name: 'flex-grow',
-        selectors: [['.flex-grow', '.flex-grow-0']],
+        selectors: ['.flex-grow', '.flex-grow-0'],
         description: 'Controls how flex items grow.',
       },
       {
         name: 'flex-shrink',
-        selectors: [['.flex-shrink', '.flex-shrink-0']],
+        selectors: ['.flex-shrink', '.flex-shrink-0'],
         description: 'Controls how flex items shrink.',
       },
-      { name: 'flex-wrap', selectors: [], description: '' },
+      {
+        name: 'flex-wrap',
+        selectors: ['.flex-wrap', '.flex-wrap-reverse', '.flex-nowrap'],
+        description: '',
+      },
       { name: 'order', description: '' },
     ],
   },
@@ -339,7 +365,7 @@ export const tailwind_options = [
     items: [
       {
         name: 'width',
-        selectors: [makeNumberValues('.w-')],
+        selectors: [...makeNumberValues('.w-', numberValues)],
         description: 'Sets the width of an element.',
       },
       {
@@ -379,7 +405,7 @@ export const tailwind_options = [
       },
       {
         name: 'height',
-        selectors: [makeNumberValues('.w-')],
+        selectors: makeNumberValues('.w-', numberValues),
         description: 'Sets the height of an element.',
       },
       {
@@ -389,7 +415,7 @@ export const tailwind_options = [
       },
       {
         name: 'max-height',
-        selectors: [makeNumberValues('.max-h-')],
+        selectors: makeNumberValues('.max-h-', numberValues),
         description: 'Sets the maximum height of an element.',
       },
     ],
@@ -403,101 +429,140 @@ export const tailwind_options = [
     items: [
       {
         name: 'border opacity',
-        selectors: [makeNumberValues('.border-opactity-')],
+        selectors: makeNumberValues('border-opacity', numberValues),
         description: '',
       },
-      { name: 'border-color', selectors: [makeColors('.border-')], description: '' },
+      { name: 'border-color', selectors: makeColors('.border-'), description: '' },
       {
         name: 'border-radius',
         selectors: [
-          [
-            '.rounded-none',
-            '.rounded-sm',
-            '.rounded',
-            '.rounded-md',
-            '.rounded-lg',
-            '.rounded-xl',
-            '.rounded-2xl',
-            '.rounded-3xl',
-            '.rounded-full',
-            '.rounded-t-none',
-            '.rounded-r-none',
-            '.rounded-b-none',
-            '.rounded-l-none',
-            '.rounded-t-sm',
-            '.rounded-r-sm',
-            '.rounded-b-sm',
-            '.rounded-l-sm',
-            '.rounded-t',
-            '.rounded-r',
-            '.rounded-b',
-            '.rounded-l',
-            '.rounded-t-md',
-            '.rounded-r-md',
-            '.rounded-b-md',
-            '.rounded-l-md',
-            '.rounded-t-lg',
-            '.rounded-r-lg',
-            '.rounded-b-lg',
-            '.rounded-l-lg',
-            '.rounded-t-xl',
-            '.rounded-r-xl',
-            '.rounded-b-xl',
-            '.rounded-l-xl',
-            '.rounded-t-2xl',
-            '.rounded-r-2xl',
-            '.rounded-b-2xl',
-            '.rounded-l-2xl',
-            '.rounded-t-3xl',
-            '.rounded-r-3xl',
-            '.rounded-b-3xl',
-            '.rounded-l-3xl',
-            '.rounded-t-full',
-            '.rounded-r-full',
-            '.rounded-b-full',
-            '.rounded-l-full',
-            '.rounded-tl-none',
-            '.rounded-tr-none',
-            '.rounded-br-none',
-            '.rounded-bl-none',
-            '.rounded-tl-sm',
-            '.rounded-tr-sm',
-            '.rounded-br-sm',
-            '.rounded-bl-sm',
-            '.rounded-tl',
-            '.rounded-tr',
-            '.rounded-br',
-            '.rounded-bl',
-            '.rounded-tl-md',
-            '.rounded-tr-md',
-            '.rounded-br-md',
-            '.rounded-bl-md',
-            '.rounded-tl-lg',
-            '.rounded-tr-lg',
-            '.rounded-br-lg',
-            '.rounded-bl-lg',
-            '.rounded-tl-xl',
-            '.rounded-tr-xl',
-            '.rounded-br-xl',
-            '.rounded-bl-xl',
-            '.rounded-tl-2xl',
-            '.rounded-tr-2xl',
-            '.rounded-br-2xl',
-            '.rounded-bl-2xl',
-            '.rounded-tl-3xl',
-            '.rounded-tr-3xl',
-            '.rounded-br-3xl',
-            '.rounded-bl-3xl',
-            '.rounded-tl-full',
-            '.rounded-tr-full',
-            '.rounded-br-full',
-            '.rounded-bl-full',
-          ],
+          '.rounded-none',
+          '.rounded-sm',
+          '.rounded',
+          '.rounded-md',
+          '.rounded-lg',
+          '.rounded-xl',
+          '.rounded-2xl',
+          '.rounded-3xl',
+          '.rounded-full',
+          '.rounded-t-none',
+          '.rounded-r-none',
+          '.rounded-b-none',
+          '.rounded-l-none',
+          '.rounded-t-sm',
+          '.rounded-r-sm',
+          '.rounded-b-sm',
+          '.rounded-l-sm',
+          '.rounded-t',
+          '.rounded-r',
+          '.rounded-b',
+          '.rounded-l',
+          '.rounded-t-md',
+          '.rounded-r-md',
+          '.rounded-b-md',
+          '.rounded-l-md',
+          '.rounded-t-lg',
+          '.rounded-r-lg',
+          '.rounded-b-lg',
+          '.rounded-l-lg',
+          '.rounded-t-xl',
+          '.rounded-r-xl',
+          '.rounded-b-xl',
+          '.rounded-l-xl',
+          '.rounded-t-2xl',
+          '.rounded-r-2xl',
+          '.rounded-b-2xl',
+          '.rounded-l-2xl',
+          '.rounded-t-3xl',
+          '.rounded-r-3xl',
+          '.rounded-b-3xl',
+          '.rounded-l-3xl',
+          '.rounded-t-full',
+          '.rounded-r-full',
+          '.rounded-b-full',
+          '.rounded-l-full',
+          '.rounded-tl-none',
+          '.rounded-tr-none',
+          '.rounded-br-none',
+          '.rounded-bl-none',
+          '.rounded-tl-sm',
+          '.rounded-tr-sm',
+          '.rounded-br-sm',
+          '.rounded-bl-sm',
+          '.rounded-tl',
+          '.rounded-tr',
+          '.rounded-br',
+          '.rounded-bl',
+          '.rounded-tl-md',
+          '.rounded-tr-md',
+          '.rounded-br-md',
+          '.rounded-bl-md',
+          '.rounded-tl-lg',
+          '.rounded-tr-lg',
+          '.rounded-br-lg',
+          '.rounded-bl-lg',
+          '.rounded-tl-xl',
+          '.rounded-tr-xl',
+          '.rounded-br-xl',
+          '.rounded-bl-xl',
+          '.rounded-tl-2xl',
+          '.rounded-tr-2xl',
+          '.rounded-br-2xl',
+          '.rounded-bl-2xl',
+          '.rounded-tl-3xl',
+          '.rounded-tr-3xl',
+          '.rounded-br-3xl',
+          '.rounded-bl-3xl',
+          '.rounded-tl-full',
+          '.rounded-tr-full',
+          '.rounded-br-full',
+          '.rounded-bl-full',
+        ],
+
+        description: '',
+      },
+      {
+        name: 'border-style',
+        selectors: [
+          '.border-solid',
+          '.border-dashed',
+          '.border-dotted',
+          '.border-double',
+          '.border-none',
         ],
         description: '',
       },
-      { name: 'border-style', selectors: [], description: '' },
-      { name: 'border-width', selectors: [], description: '' },
+      {
+        name: 'border-width',
+        selectors: [
+          '.border',
+          '.border-0	',
+          '.border-2	',
+          '.border-4	',
+          '.border-8	',
+          '.border-t	',
+          '.border-t-0	',
+          '.border-t-2	',
+          '.border-t-4	',
+          '.border-t-8	',
+          '.border-r	',
+          '.border-r-0	',
+          '.border-r-2	',
+          '.border-r-4	',
+          '.border-r-8	',
+          '.border-b	',
+          '.border-b-0	',
+          '.border-b-2	',
+          '.border-b-4	',
+          '.border-b-8	',
+          '.border-l	',
+          '.border-l-0	',
+          '.border-l-2	',
+          '.border-l-4	',
+          '.border-l-8	',
+        ],
+        description: 'Sets border width in increments of 1px.',
+      },
       { name: 'divide color', description: '' },
       { name: 'divide opacity', description: '' },
       { name: 'divide style', description: '' },
@@ -508,6 +573,7 @@ export const tailwind_options = [
       { name: 'ring opacity', description: '' },
       { name: 'ring width', description: '' },
     ],
+    // description:'Set the border of the element.'
   },
   {
     name: 'Transition',
@@ -754,12 +820,12 @@ export const tailwind_options = [
       { name: 'list-style-type', description: '' },
       {
         name: 'text color',
-        selectors: [makeColors('.text-')],
+        selectors: makeColors('.text-'),
         description: 'Sets the text color.',
       },
       {
         name: 'text opacity',
-        selectors: [makePercentageValues('.text-opacity-')],
+        selectors: makePercentageValues('.text-opacity-'),
         description: 'Sets text opacity when used with text-[color].',
       },
       {
