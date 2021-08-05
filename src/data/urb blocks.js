@@ -2,12 +2,9 @@ import Blockly from 'blockly';
 import { tailwind_options } from './tailwind options';
 
 function getTailwindItems(selectedGroup) {
-  console.log(tailwind_options.filter(group => group.name === 'Layout'));
+  // console.log(tailwind_options.filter(group => group.name === 'Layout'));
   return tailwind_options
-    .filter(group => {
-      console.log({ group });
-      return group.items && group.name.toLowerCase() === selectedGroup;
-    })[0]
+    .filter(group => group.items && group.name.toLowerCase() === selectedGroup)[0]
     .items.filter(item => item.selectors)
     .map(item => [item.name, item.name]);
 }
