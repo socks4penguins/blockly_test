@@ -1,4 +1,58 @@
 import Blockly from 'blockly';
+import { tailwind_options } from './tailwind options';
+
+function getTailwindItems(selectedGroup) {
+  console.log(tailwind_options.filter(group => group.name === 'Layout'));
+  return tailwind_options
+    .filter(group => {
+      console.log({ group });
+      return group.items && group.name.toLowerCase() === selectedGroup;
+    })[0]
+    .items.filter(item => item.selectors)
+    .map(item => [item.name, item.name]);
+}
+
+Blockly.Blocks['tailwind_dropdown'] = {
+  init: function() {
+    this.appendValueInput('next')
+      .setCheck(null)
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['layout ', 'layout'],
+          ['spacing', 'spacing'],
+          ['background', 'background'],
+          ['transform', 'transform'],
+          ['effects', 'effects'],
+          ['flexbox', 'flexbox'],
+        ]),
+        'group',
+      )
+      .appendField(
+        new Blockly.FieldDropdown(() => {
+          console.log('dr', this.getFieldValue('group'));
+          return getTailwindItems(this.getFieldValue('group'));
+          // === 'spacing'
+          // ? [
+          //     ['spacing', 'spacing'],
+          //     ['spacing2', 'spacing2'],
+          //   ]
+          // : [
+          //     [' ', 'none'],
+          //     ['small', 'sm'],
+          //     ['medium', 'md'],
+          //     ['large', 'lg'],
+          //     ['x large', 'xl'],
+          //     ['xx large', '2xl'],
+          //   ];
+        }),
+        'options',
+      );
+    this.setOutput(true, null);
+    this.setColour(165);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
 
 Blockly.Blocks['horizontal_menu_subitems'] = {
   init: function() {

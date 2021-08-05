@@ -1,5 +1,15 @@
 import Blockly from 'blockly';
 
+Blockly.JavaScript['tailwind_dropdown'] = function(block) {
+  var dropdown_group = block.getFieldValue('group');
+  var dropdown_options = block.getFieldValue('options');
+  var value_next = Blockly.JavaScript.valueToCode(block, 'next', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['horizontal_menu_subitems'] = function(block) {
   var text_lefticon = block.getFieldValue('leftIcon');
   var text_text = block.getFieldValue('text');
