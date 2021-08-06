@@ -3,12 +3,7 @@
 import React, { useState } from 'react';
 import { useTransition, a } from '@react-spring/web';
 
-// import ReactDOM from 'react-dom';
-// import Header from './Header';
-// import Footer from './Footer';
-// import './styles.css';
-
-export default function AnimList({ onData, renderedItems }) {
+export default function AnimList({ springs }) {
   const [state, setState] = useState({
     todos: [
       { key: 't1', data: { text: 'Board the plane', isDone: false } },
@@ -37,14 +32,12 @@ export default function AnimList({ onData, renderedItems }) {
   };
 
   const items = getItems();
- const transitions = useTransition(items, {
-   key: item => item.key,
-   from: { height: 0, opacity: 1 },
-   leave: { height: 0, opacity: 0 },
-   enter: { height: 60, opacity: 1 },
-   config: { mass: 5, tension: 500, friction: 100 },
-   trail: 25,
- });
+
+  const transitions = useTransition(items, {
+    key: item => item.key,
+    ...(springs || {}).items,
+  });
+
   const handleSelect = selected => setState({ ...state, selected });
   const handleClearCompleted = () =>
     setState({ ...state, todos: state.todos.filter(({ data }) => !data.isDone) });
