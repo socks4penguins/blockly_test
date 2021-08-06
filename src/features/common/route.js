@@ -3,12 +3,14 @@
 
 import List from './List';
 import ListContainer from './ListContainer';
+import SpringPlayground from './SpringPlayground';
 
 export default {
   path: 'common',
   name: 'Common',
   childRoutes: [
     {path:'list', component:List},
-    {path:'listc', component:ListContainer}
+    {path:'listc', component:ListContainer},
+    {path:'springs', component:SpringPlayground},
   ],
 };
